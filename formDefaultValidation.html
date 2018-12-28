@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<body>
+<style>
+/* Required CSS for Validation Begins Here */
+html div#om-trigger-conversion #errorAlert {
+    font-style: italic;
+    text-align: center;
+    color: red;
+    font-size: .8em;
+    margin: 10px;
+    display: none;
+}
+
+#errorAlert {
+display: none;
+}
+
+html div#om-trigger-conversion input:invalid {
+    border: 2px solid red;
+}
+
+html div#om-trigger-conversion input:placeholder-shown {
+    border-style: inset;
+    border: 1px lightgray solid;
+}
+
+html div#om-trigger-conversion input:disabled {
+    pointer-events: none;
+}
+/* Required CSS for Validation Ends Here */		
+</style>
+
+<form id="testForm">
+	<input type="text" id='subscriber-name' placeholder="Please Enter Your Name" required />
+	<input type="email" id='subscriber-email' placeholder="Please Enter your Email Address" required />
+    
+    <div id="errorAlert">You need to first correct your invalid inputs before you can submit.</div>
+    
+	<input type="submit" id='subscriber-submit-button' class="om-trigger-conversion" value="Subscribe" />
+</form>
+
+<script type="text/javascript">
+    var form = document.querySelector('#testForm');
+    console.log('form', form)
+    var errorAlert = document.querySelector("#errorAlert");
+    var formSubmitButton = document.querySelector("input.om-trigger-conversion"); 
+    console.log('formSubmitButton', formSubmitButton);
+    /* This variable is a flag to know if a user has attempted to submit at least once. */
+    var attemptToSubmitAtLeastOnceFlag = false; /* This code hides the error field. */
+    function fieldsCheck() {
+        var lookForInvalidInputs = document.querySelectorAll(':invalid'); 
+        console.log("lookForInvalidInputs", lookForInvalidInputs);
+        /* Scan Form for All Inputs that currently have a :placeholder-shown pseudo-class */
+        var lookForInputsShowingPlaceholders = document.querySelectorAll(':placeholder-shown'); 
+        /* If there are no "invalid" states OR Placeholder States, then the table will be 0 */
+        if (lookForInvalidInputs.length > 0 || lookForInputsShowingPlaceholders.length > 0) { 
+        /* If the inputs are invalid, show the Error Message and Disable the Submit button */
+            formSubmitButton.disabled = true;
+            errorAlert.style.display = "block";
+            for (var i =1; i< lookForInvalidInputs.length;i++) {
+				lookForInvalidInputs[i].style = "border:solid 1px red;";
+            }
+            
+        } else { 
+        /* If the inputs are valid, remove the Error Message and Enable the Submit button */
+            errorAlert.style.display = "none";
+            formSubmitButton.disabled = false;
+        }
+    }
+/* --------------------Event Listeners Below --------------------- */
+/* As keys are pressed, check to see if the fields have been validated to allow input. If fields are valid, run 'fieldsCheck' function. The key down function will only display the Error Message after the user attempts to press the Submit Button once. */
+    form.addEventListener("keydown", function() {
+        if (attemptToSubmitAtLeastOnceFlag == true) {
+            fieldsCheck();
+        }
+    });
+
+    formSubmitButton.addEventListener("click", function() {
+        attemptToSubmitAtLeastOnceFlag = true;
+        fieldsCheck();
+        formSubmitButton.click();
+    });
+</script>
+
+</body>
+</html>
