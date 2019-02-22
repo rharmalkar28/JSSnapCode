@@ -37,3 +37,46 @@ item.next();
 
 // a liabrary for mobile numbers
 // https://github.com/catamphetamine/libphonenumber-js
+
+
+async function test1() {
+  try {
+    console.log('test 1 Ok');
+  } catch (error) {
+    throw new Error({error:'TestError1'});
+  }
+}
+
+async function test2() {
+  try {
+    console.log('test 1 Not Ok');
+    // throw new Error('test 2 error');
+  } catch (error) {
+    throw new Error({error:'TestError2'});
+  }
+}
+
+async function test3() {
+  try {
+    console.log('test 1 Ok');
+  } catch (error) {
+    throw new Error({error:'TestError3'});
+  }
+}
+
+Promise.all([test1(),test2(),test3()]).then(values => {
+  console.log('values', values);
+}).catch(error => { 
+  console.log('error', JSON.stringify(error))
+});
+
+Promise.all([test1(),test2(),test3()]).then(function(values) {
+  try{
+  console.log('values', values);
+  }catch(e){
+  console.log('errorPro', JSON.stringify(e))
+  }  
+  
+  }).catch(error => { 
+    console.log('error', JSON.stringify(error))
+  });
